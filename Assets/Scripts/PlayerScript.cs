@@ -1,25 +1,27 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // Movement variables
     public float moveSpeed = 5f;
     public float jumpForce = 8f;
     public float dashSpeed = 10f;
-    public float dashCooldown = 6f;
-    public float coyoteTime = 0.75f; // Time after leaving ground that the player can still jump
+    public float dashCooldown = 1f;
+    public float coyoteTime = 0.5f; // Time after leaving ground that the player can still jump
     
     // World state
-    public bool inFirstWorld = true; // Start in "worldTypeFirst"
-    public bool canDash = true; // Dash cooldown flag
+    public bool inFirstWorld = true; // Start in first world
+    private bool canSwitchWorlds = true; // Can switch worlds?
+    public float worldSwitchCooldown = 1.5f; // Cooldown time in seconds
+    private float cooldownTimer = 0f; // Timer to track cooldown (I hate timers in Unity)
+    
+    // Movement and ground checking
+    public bool isGrounded;
+    public bool canDash = true; // Dash cooldown
     private float lastGroundedTime; // For coyote time jumping
     private float dashTimeStamp; // Timestamp to track cooldown
     private int dashDirection = 0; // -1 for left, 1 for right
-
-    // Movement and ground checking
-    public bool isGrounded;
     public LayerMask groundLayer;
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
@@ -38,7 +40,7 @@ public class PlayerScript : MonoBehaviour
 
     void Update()
     {
-        // Horizontal movement
+        // Horizontal left Right movement
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
         if (!isDashing)
@@ -53,7 +55,7 @@ public class PlayerScript : MonoBehaviour
             lastGroundedTime = Time.time; // Record the last time we were on the ground
         }
 
-        // Jump input
+        // Jumping
         if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W)) && CanJump())
         {
             Jump();
@@ -62,10 +64,21 @@ public class PlayerScript : MonoBehaviour
         // Double-tap to dash
         HandleDash();
 
-        // World switch input
-        if (Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.LeftAlt))
+        // World switch
+        if (canSwitchWorlds && Input.GetKeyDown(KeyCode.S) || canSwitchWorlds && Input.GetKeyDown(KeyCode.LeftAlt))
         {
             SwitchWorld();
+            
+        }
+        
+        // World switch cooldown timer
+        if (!canSwitchWorlds)
+        {
+            cooldownTimer -= Time.deltaTime; // Count down the timer
+            if (cooldownTimer <= 0)
+            {
+                canSwitchWorlds = true; // Re-enable world switching
+            }
         }
     }
 
@@ -117,10 +130,12 @@ public class PlayerScript : MonoBehaviour
 
     private void SwitchWorld()
     {
-        inFirstWorld = !inFirstWorld; // Toggle world state
+        inFirstWorld = !inFirstWorld; // Change  world state
         string activeWorldTag = inFirstWorld ? "firstWorld" : "secondWorld";
-
-        // Change physics properties to match the new world (simplified example)
+        canSwitchWorlds = false; // Prevent switching again
+        cooldownTimer = worldSwitchCooldown; // Reset the cooldown timer
+        
+        // No idea. No touch
         //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("firstWorld"), !inFirstWorld);
         //Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("secondWorld"), inFirstWorld);
     }
