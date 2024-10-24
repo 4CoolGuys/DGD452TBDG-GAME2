@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
     private float lastTapTimeD = 0;
     private bool isDashing;
 
+    // Add this to the top of your PlayerController script to store the reference to the box you're pushing
+    private PushableBoxScript pushableBox = null;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -42,6 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         // Horizontal left Right movement
         horizontalInput = Input.GetAxisRaw("Horizontal");
+        
 
         if (!isDashing)
         {
@@ -145,5 +149,27 @@ public class PlayerController : MonoBehaviour
         // Ground check using a small box overlap
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, 0.1f, groundLayer);
         return raycastHit.collider != null && (raycastHit.collider.CompareTag("bothWorlds") || raycastHit.collider.CompareTag(inFirstWorld ? "firstWorld" : "secondWorld"));
+    }
+    
+    public float GetHorizontalInput() // For the box pushing thing
+    {
+        return horizontalInput;
+    }
+    
+    // Add a method to detect when the player is near the box
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            pushableBox = collision.gameObject.GetComponent<PushableBoxScript>();
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Box"))
+        {
+            pushableBox = null;  // Stop interacting with the box when the player moves away
+        }
     }
 }
