@@ -11,7 +11,7 @@ public class PressurePlate : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other)
     {
         // Check if the object that entered is the player or the box
-        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
+        if (other.gameObject.CompareTag("Player") || other.gameObject.GetComponent<PushableBoxScript>().amBox)
         {
             objectsOnPlate++;
             ActivatePlate();
@@ -21,7 +21,7 @@ public class PressurePlate : MonoBehaviour
     private void OnTriggerExit2D(Collider2D other)
     {
         // Check if the object that exited is the player or the box
-        if (other.gameObject.CompareTag("Player") || other.gameObject.CompareTag("Box"))
+        if (other.gameObject.CompareTag("Player") || other.gameObject.GetComponent<PushableBoxScript>().amBox)
         {
             objectsOnPlate--;
             if (objectsOnPlate <= 0)

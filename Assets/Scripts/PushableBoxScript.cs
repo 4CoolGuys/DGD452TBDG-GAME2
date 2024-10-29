@@ -9,6 +9,8 @@ public class PushableBoxScript : MonoBehaviour
 
     private bool isBeingPushed = false;
 
+    public bool amBox = true;
+    
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();

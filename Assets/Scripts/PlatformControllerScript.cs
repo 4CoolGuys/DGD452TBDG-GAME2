@@ -22,7 +22,7 @@ public class PlatformControllerScript : MonoBehaviour
         isInFirstWorld = gameObject.CompareTag("firstWorld");
 
         // Get the  world state of the player
-        playerInFirstWorld = player.GetComponent<PlayerController>().inFirstWorld;
+        playerInFirstWorld = player.GetComponent<PlayerControllerScript>().inFirstWorld;
 
         UpdatePlatformState();
     }
@@ -30,7 +30,7 @@ public class PlatformControllerScript : MonoBehaviour
     void Update()
     {
         // Check current world of the player
-        bool currentPlayerWorld = player.GetComponent<PlayerController>().inFirstWorld;
+        bool currentPlayerWorld = player.GetComponent<PlayerControllerScript>().inFirstWorld;
 
         // If the player's world has changed, update the platform's state
         if (currentPlayerWorld != playerInFirstWorld)

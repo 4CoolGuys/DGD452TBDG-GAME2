@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerControllerScript : MonoBehaviour
 {
     // Movement variables
     public float moveSpeed = 5f;
@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
     public float dashSpeed = 10f;
     public float dashCooldown = 1f;
     public float coyoteTime = 0.5f; // Time after leaving ground that the player can still jump
+    private Vector2 lastMoveDirection = Vector2.zero;
     
     // World state
     public bool inFirstWorld = true; // Start in first world
@@ -34,6 +35,8 @@ public class PlayerController : MonoBehaviour
 
     // Add this to the top of your PlayerController script to store the reference to the box you're pushing
     private PushableBoxScript pushableBox = null;
+    
+    public bool hasKey = false;// Tracks if player has a key
     
     void Start()
     {
@@ -83,6 +86,13 @@ public class PlayerController : MonoBehaviour
             {
                 canSwitchWorlds = true; // Re-enable world switching
             }
+        }
+        
+        Vector2 movement = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+    
+        if (movement != Vector2.zero)
+        {
+            lastMoveDirection = movement.normalized; // Store the direction if the player is moving
         }
     }
 
@@ -148,7 +158,7 @@ public class PlayerController : MonoBehaviour
     {
         // Ground check using a small box overlap
         RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, Vector2.down, 0.1f, groundLayer);
-        return raycastHit.collider != null && (raycastHit.collider.CompareTag("bothWorlds") || raycastHit.collider.CompareTag(inFirstWorld ? "firstWorld" : "secondWorld"));
+        return raycastHit.collider != null && (raycastHit.collider.CompareTag("bothWorlds") || raycastHit.collider.CompareTag(inFirstWorld ? "firstWorld" : "secondWorld") || raycastHit.collider.CompareTag("Box"));
     }
     
     public float GetHorizontalInput() // For the box pushing thing
@@ -171,5 +181,10 @@ public class PlayerController : MonoBehaviour
         {
             pushableBox = null;  // Stop interacting with the box when the player moves away
         }
+    }
+    
+    public Vector2 GetLastMoveDirection()
+    {
+        return lastMoveDirection;
     }
 }
