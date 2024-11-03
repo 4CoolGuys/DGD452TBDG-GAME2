@@ -6,7 +6,7 @@ public class PressurePlate : MonoBehaviour
     // Reference to the Door script
     [SerializeField] private DoorScript door;
 
-    private int objectsOnPlate = 0;  // Tracks the number of objects on the plate
+    private int objectsOnPlate = 0;  // Tracks the number of objects on the plate (Player or boxes)
 
     private void OnTriggerEnter2D(Collider2D other)
     {

@@ -36,7 +36,7 @@ public class CameraFollowScript : MonoBehaviour
     {
         if (playerTransform == null || playerController == null) return;
 
-        // Update the direction based on the player's recent movement.
+        // Update the direction based on the player's most recent movement.
         lastMoveDirection = playerController.GetLastMoveDirection();
 
         // Calculate the new camera position with the look-ahead effect.

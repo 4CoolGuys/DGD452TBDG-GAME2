@@ -9,7 +9,7 @@ public class PlatformControllerScript : MonoBehaviour
     private bool isInFirstWorld; // Determines if this platform belongs to the first world or the second
     private bool playerInFirstWorld; // Current world of the player
 
-    // Reference to the player object (set this in the Unity Inspector or find dynamically)
+    // Reference to the player object
     public GameObject player;
 
     void Start()
@@ -47,7 +47,7 @@ public class PlatformControllerScript : MonoBehaviour
         {
             // Enable platform's collider and reset opacity to full
             platformCollider.enabled = true;
-            SetPlatformOpacity(1f); // Full opacity
+            SetPlatformOpacity(1f);
         }
         else
         {
@@ -57,11 +57,11 @@ public class PlatformControllerScript : MonoBehaviour
         }
     }
 
-    // Helper method to set the platform's opacity
+    // Helps set the platform's opacity
     void SetPlatformOpacity(float opacity)
     {
         Color color = platformRenderer.color;
-        color.a = opacity; // Set the alpha channel to control transparency
+        color.a = opacity;
         platformRenderer.color = color;
     }
 }

@@ -1,4 +1,4 @@
-using System.Collections;
+            using System.Collections;
 using UnityEngine;
 
 public class PlayerControllerScript : MonoBehaviour
@@ -33,10 +33,10 @@ public class PlayerControllerScript : MonoBehaviour
     private float lastTapTimeD = 0;
     private bool isDashing;
 
-    // Add this to the top of your PlayerController script to store the reference to the box you're pushing
-    private PushableBoxScript pushableBox = null;
+    public bool hasKey = false; // Variable to track if the player has a key
     
-    public bool hasKey = false;// Tracks if player has a key
+    // Store the reference to the box pushing
+    private PushableBoxScript pushableBox = null;
     
     void Start()
     {

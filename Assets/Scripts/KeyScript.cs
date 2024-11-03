@@ -1,8 +1,8 @@
-using UnityEngine;
+    using UnityEngine;
 
 public class KeyScript : MonoBehaviour
 {
-    private bool isPickedUp = false;
+    public bool isPickedUp = false;
     private Transform player;
 
     void Update()
@@ -26,7 +26,7 @@ public class KeyScript : MonoBehaviour
             player = playerController.transform;
             playerController.hasKey = true;
 
-            // Optionally, disable the key's collider so it can't be picked up again
+            // Disable the key's collider so it can't be picked up again
             GetComponent<Collider2D>().enabled = false;
         }
     }

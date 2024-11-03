@@ -12,11 +12,11 @@ public class DoorScript : MonoBehaviour
 
     private void Start()
     {
-        // Store the initial position of the door
+        // Store the begining position of the door
         closedPosition = transform.position;
     }
 
-    // This method opens the door
+    // This opens the door
     public void OpenDoor()
     {
         if (!isOpen)
@@ -28,7 +28,7 @@ public class DoorScript : MonoBehaviour
         }
     }
 
-    // This method closes the door
+    // This closes the door
     public void CloseDoor()
     {
         if (isOpen)
@@ -39,7 +39,7 @@ public class DoorScript : MonoBehaviour
             Debug.Log("Door closing...");
         }
     }
-
+    
     // Coroutine to move the door smoothly between open and closed positions
     private IEnumerator MoveDoor(Vector3 targetPosition)
     {
