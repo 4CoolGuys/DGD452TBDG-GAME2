@@ -8,6 +8,7 @@ TagManager:
   - firstWorld
   - secondWorld
   - Box
+  - Key
   layers:
   - Default
   - TransparentFX

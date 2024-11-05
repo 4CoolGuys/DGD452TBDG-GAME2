@@ -1,27 +1,60 @@
-using System.Collections;
 using UnityEngine;
 
 public class KeyDoorScript : MonoBehaviour
 {
     private Collider2D doorCollider;
-    private bool isOpen = false;// To check if the door is currently open
-    [SerializeField] private Vector3 openPositionOffset = new Vector3(0, 2f, 0); // Moves 2 units upwards
-    private Vector3 closedPosition;  // The door's initial position
-    [SerializeField] private float openCloseSpeed = 2f;  // Speed at which the door moves
+    private bool isOpen = false;
+    private bool isMovingUp = false;
+
+    [SerializeField] private float openHeight = 3f; // Height the door will move upwards
+    [SerializeField] private float openSpeed = 2f; // Speed of the door opening
+
+    private Vector3 closedPosition;
+    private Vector3 openPosition;
 
     private void Start()
     {
         doorCollider = GetComponent<Collider2D>();
+        closedPosition = transform.position;
+        openPosition = closedPosition + Vector3.up * openHeight;
     }
 
-    public void OpenDoor()
+    private void Update()
+    {
+        if (isMovingUp)
+        {
+            // Move the door upwards towards the open position
+            transform.position = Vector3.Lerp(transform.position, openPosition, openSpeed * Time.deltaTime);
+
+            // Check if door has reached the open position (or is very close)
+            if (Vector3.Distance(transform.position, openPosition) < 0.01f)
+            {
+                transform.position = openPosition; // Snaps door to open position
+                isMovingUp = false; // Stop moving door
+            }
+        }
+    }
+
+    public void OpenDoor(PlayerControllerScript player)
     {
         if (!isOpen)
         {
-            StopAllCoroutines();  // Stop any currently running closing coroutine
-            StartCoroutine(MoveDoor(closedPosition + openPositionOffset));  // Start opening the door
             isOpen = true;
-            Debug.Log("Door opening...");
+            isMovingUp = true; // Open door up
+
+            player.hasKey = false; // Player "uses" the key
+            DestroyKeyObject(player); // Destroy the key GameObject
+
+            Debug.Log("Door opened and is moving up!");
+        }
+    }
+
+    private void DestroyKeyObject(PlayerControllerScript player)
+    {
+        GameObject keyObject = GameObject.FindWithTag("Key");
+        if (keyObject != null)
+        {
+            Destroy(keyObject); // Destroy the key
         }
     }
 
@@ -30,20 +63,7 @@ public class KeyDoorScript : MonoBehaviour
         PlayerControllerScript player = collision.gameObject.GetComponent<PlayerControllerScript>();
         if (player != null && !player.hasKey)
         {
-            // Player collides with the closed door without a key
             Debug.Log("Door is locked. You need a key.");
         }
-    }
-    
-    private IEnumerator MoveDoor(Vector3 targetPosition)
-    {
-        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
-        {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, openCloseSpeed * Time.deltaTime);
-            yield return null;  // Wait for the next frame
-        }
-
-        // Snap the position once it's close enough
-        transform.position = targetPosition;
     }
 }

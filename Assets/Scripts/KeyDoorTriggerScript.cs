@@ -14,7 +14,7 @@ public class KeyDoorTriggerScript : MonoBehaviour
         PlayerControllerScript player = other.GetComponent<PlayerControllerScript>();
         if (player != null && player.hasKey)
         {
-            doorScript.OpenDoor(); // Open the door if the player has the key
+            doorScript.OpenDoor(player); // Pass the player reference to OpenDoor
         }
     }
 }

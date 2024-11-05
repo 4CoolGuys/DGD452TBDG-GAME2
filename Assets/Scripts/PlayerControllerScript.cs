@@ -1,4 +1,4 @@
-            using System.Collections;
+using System.Collections;
 using UnityEngine;
 
 public class PlayerControllerScript : MonoBehaviour
@@ -15,7 +15,7 @@ public class PlayerControllerScript : MonoBehaviour
     public bool inFirstWorld = true; // Start in first world
     private bool canSwitchWorlds = true; // Can switch worlds?
     public float worldSwitchCooldown = 1.5f; // Cooldown time in seconds
-    private float cooldownTimer = 0f; // Timer to track cooldown (I hate timers in Unity)
+    private float cooldownTimer = 0f; // Timer to track cooldown
     
     // Movement and ground checking
     public bool isGrounded;
@@ -42,13 +42,15 @@ public class PlayerControllerScript : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
+
+        // Freeze the rotation to prevent the player from rotating when colliding
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
     }
 
     void Update()
     {
         // Horizontal left Right movement
         horizontalInput = Input.GetAxisRaw("Horizontal");
-        
 
         if (!isDashing)
         {
@@ -72,7 +74,7 @@ public class PlayerControllerScript : MonoBehaviour
         HandleDash();
 
         // World switch
-        if (canSwitchWorlds && Input.GetKeyDown(KeyCode.S) || canSwitchWorlds && Input.GetKeyDown(KeyCode.LeftAlt))
+        if (canSwitchWorlds && Input.GetKeyDown(KeyCode.S) || canSwitchWorlds && Input.GetKeyDown(KeyCode.F))
         {
             SwitchWorld();
             
