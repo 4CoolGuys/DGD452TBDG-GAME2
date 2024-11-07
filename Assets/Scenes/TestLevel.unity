@@ -649,6 +649,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: firstWorld
       objectReference: {fileID: 0}
+    - target: {fileID: 4305699360088750505, guid: 8f9041738dd2d8f439a5e200ba797ab7, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7938433944802978311, guid: 8f9041738dd2d8f439a5e200ba797ab7, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.5
